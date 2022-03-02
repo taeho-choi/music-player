@@ -10,12 +10,25 @@ let num = 0;
 let active = 0;
 
 const audio = frame.querySelectorAll("audio");
+let isPlaying = false;
 
 function activation(index, lists) {
     for(let el of lists) {
         el.classList.remove("on");
     }
     lists[index].classList.add("on");
+    if(isPlaying) {
+        lists[index].querySelector(".pic").classList.add("on");
+        lists[index].querySelector("audio").play();
+    }
+}
+
+function initMusic() {
+    for(let el of audio) {
+        el.pause();
+        el.load();
+        el.parentElement.previousElementSibling.classList.remove("on");
+    }
 }
 
 for(let el of lists) {
@@ -29,21 +42,34 @@ for(let el of lists) {
     let load = el.querySelector(".load");
 
     play.addEventListener("click", e=> {
-        e.currentTarget.closest("article").querySelector(".pic").classList.add("on");
-        e.currentTarget.closest("article").querySelector("audio").play();
+        let isActive = e.currentTarget.closest("article").classList.contains("on");
+        if(isActive) {
+            e.currentTarget.closest("article").querySelector(".pic").classList.add("on");
+            e.currentTarget.closest("article").querySelector("audio").play();
+            isPlaying = true;
+        }
     });
     pause.addEventListener("click", e=> {
-        e.currentTarget.closest("article").querySelector(".pic").classList.remove("on");
-        e.currentTarget.closest("article").querySelector("audio").pause();
+        let isActive = e.currentTarget.closest("article").classList.contains("on");
+        if(isActive) {
+            e.currentTarget.closest("article").querySelector(".pic").classList.remove("on");
+            e.currentTarget.closest("article").querySelector("audio").pause();
+            isPlaying = false;
+        }
     });
     load.addEventListener("click", e=> {
-        e.currentTarget.closest("article").querySelector(".pic").classList.add("on");
-        e.currentTarget.closest("article").querySelector("audio").load();
-        e.currentTarget.closest("article").querySelector("audio").play();
+        let isActive = e.currentTarget.closest("article").classList.contains("on");
+        if(isActive) {
+            e.currentTarget.closest("article").querySelector(".pic").classList.add("on");
+            e.currentTarget.closest("article").querySelector("audio").load();
+            e.currentTarget.closest("article").querySelector("audio").play();
+            isPlaying = true;
+        }
     });
 }
 
 prev.addEventListener("click", ()=> {
+    initMusic();
     num++;
     frame.style.transform = `rotate(${deg * num}deg)`;
 
@@ -51,6 +77,7 @@ prev.addEventListener("click", ()=> {
     activation(active, lists);
 });
 next.addEventListener("click", ()=> {
+    initMusic();
     num--;
     frame.style.transform = `rotate(${deg * num}deg)`;
 
