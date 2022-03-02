@@ -9,6 +9,15 @@
 		transform: rotate(360deg);
 	}
 }
+/* Album cover shadow transform animation */
+@keyframes ani2 {
+	0% {
+		transform: translateY(10%) rotate(0deg);
+	}
+	100% {
+		transform: translateY(10%) rotate(360deg);
+	}
+}
 
 /* Init */
 * {
@@ -148,6 +157,12 @@ figure section article .inner .pic .dot {
 	position: relative;
 	z-index: 3;
 	box-shadow: inset 5px 5px 10px rgba(0, 0, 0, 0.1);
+}
+figure section article .inner .pic.on::after {
+	animation: ani 8s linear infinite;
+}
+figure section article .inner .pic.on::before {
+	animation: ani2 8s linear infinite;
 }
 
 /* Music text */
